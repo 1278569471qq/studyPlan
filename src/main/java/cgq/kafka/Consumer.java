@@ -5,6 +5,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.Properties;
 
 /******************************************************
@@ -17,8 +18,8 @@ public class Consumer {
 
     static Logger log = Logger.getLogger(Producer.class);
 
-    private static final String TOPIC = "milo2";
-    private static final String BROKER_LIST = "118.212.149.51:9092";
+    private static final String TOPIC = KafKaConstant.TOPIC;
+    private static final String BROKER_LIST = KafKaConstant.BROKER_LIST;
     private static KafkaConsumer<String,String> consumer = null;
 
     static {
@@ -39,10 +40,11 @@ public class Consumer {
 
 
     public static void main(String[] args) {
+        consumer.subscribe(Arrays.asList(KafKaConstant.TOPIC));
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(10);
             for (ConsumerRecord<String, String> record : records) {
-                log.info(record);
+                System.out.println(record);
             }
         }
     }

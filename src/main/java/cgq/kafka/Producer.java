@@ -1,10 +1,14 @@
 package cgq.kafka;
 
-import org.apache.kafka.clients.producer.*;
+import java.util.Properties;
+
+import org.apache.kafka.clients.producer.Callback;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.log4j.Logger;
-
-import java.util.Properties;
 
 /******************************************************
  ****** @ClassName   : Producer.java
@@ -16,8 +20,8 @@ public class Producer {
 
     static Logger log = Logger.getLogger(Producer.class);
 
-    private static final String TOPIC = "milo2";
-    private static final String BROKER_LIST = "118.212.149.51:9092";
+    private static final String TOPIC = KafKaConstant.TOPIC;
+    private static final String BROKER_LIST = KafKaConstant.BROKER_LIST;
     private static KafkaProducer<String,String> producer = null;
 
     /*
@@ -49,7 +53,7 @@ public class Producer {
                 @Override
                 public void onCompletion(RecordMetadata recordMetadata, Exception e) {
                     if (null != e){
-                        log.info("send error" + e.getMessage());
+                        System.out.println(("send error" + e.getMessage()));
                     }else {
                         System.out.println(String.format("offset:%s,partition:%s",recordMetadata.offset(),recordMetadata.partition()));
                     }
