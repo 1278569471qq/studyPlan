@@ -1,6 +1,8 @@
 package cgq.kafka;
 
 import java.util.Properties;
+import java.util.Scanner;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -20,8 +22,8 @@ public class Producer {
 
     static Logger log = Logger.getLogger(Producer.class);
 
-    private static final String TOPIC = KafKaConstant.TOPIC;
-    private static final String BROKER_LIST = KafKaConstant.BROKER_LIST;
+    private static final String TOPIC = cgq.kafka.KafKaConstant.TOPIC;
+    private static final String BROKER_LIST = cgq.kafka.KafKaConstant.BROKER_LIST;
     private static KafkaProducer<String,String> producer = null;
 
     /*
@@ -46,8 +48,14 @@ public class Producer {
     public static void main(String[] args) throws InterruptedException {
         //消息实体
         ProducerRecord<String , String> record = null;
-        for (int i = 0; i < 1000; i++) {
-            record = new ProducerRecord<String, String>(TOPIC, "value"+(int)(10*(Math.random())));
+
+        while (true) {
+            Scanner sc = new Scanner(System.in);
+            String next = sc.nextLine();
+            if (next.equalsIgnoreCase("exit")) {
+                break;
+            }
+            record = new ProducerRecord<String, String>(TOPIC, next);
             //发送消息
             producer.send(record, new Callback() {
                 @Override

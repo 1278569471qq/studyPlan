@@ -25,12 +25,13 @@ public class Consumer {
     static {
         Properties configs = initConfig();
         consumer = new KafkaConsumer<String, String>(configs);
+        consumer.subscribe(Arrays.asList(TOPIC));
     }
 
     private static Properties initConfig(){
         Properties properties = new Properties();
         properties.put("bootstrap.servers",BROKER_LIST);
-        properties.put("group.id","0");
+        properties.put("group.id","1");
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.setProperty("enable.auto.commit", "true");
@@ -39,13 +40,19 @@ public class Consumer {
     }
 
 
-    public static void main(String[] args) {
-        consumer.subscribe(Arrays.asList(KafKaConstant.TOPIC));
+    public static void startConsumer() {
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(10);
             for (ConsumerRecord<String, String> record : records) {
-                System.out.println(record);
+                System.out.println(record.value());
             }
         }
+    }
+
+    public static KafkaConsumer<String,String> getConsumer() {
+        return consumer;
+    }
+    public static void main(String[] args) {
+        startConsumer();
     }
 }
