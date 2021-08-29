@@ -1,4 +1,4 @@
-package cgq.kafka;
+package club.zzxn.kafka;
 
 import java.util.concurrent.TimeUnit;
 

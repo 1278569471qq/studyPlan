@@ -1,4 +1,4 @@
-package cgq.kafka;
+package club.zzxn.kafka;
 
 /**
  * @author zhangzhenxin03 <zhangzhenxin03@kuaishou.com>

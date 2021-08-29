@@ -1,8 +1,7 @@
-package cgq.kafka;
+package club.zzxn.kafka;
 
 import java.util.Properties;
 import java.util.Scanner;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -22,8 +21,8 @@ public class Producer {
 
     static Logger log = Logger.getLogger(Producer.class);
 
-    private static final String TOPIC = cgq.kafka.KafKaConstant.TOPIC;
-    private static final String BROKER_LIST = cgq.kafka.KafKaConstant.BROKER_LIST;
+    private static final String TOPIC = KafKaConstant.TOPIC;
+    private static final String BROKER_LIST = KafKaConstant.BROKER_LIST;
     private static KafkaProducer<String,String> producer = null;
 
     /*
