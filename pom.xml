@@ -4,8 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cgq</groupId>
-    <artifactId>studyPlan</artifactId>
+    <parent>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-parent</artifactId>
+            <version>2.1.12.RELEASE</version>
+    </parent>
+
+    <groupId>com.zzxn</groupId>
+    <artifactId>study</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
@@ -13,22 +19,86 @@
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka_2.11</artifactId>
             <version>1.0.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
             <version>1.0.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
             <version>0.1.54</version>
         </dependency>
+        <!--Spring-web依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--连通 Spring 和 Hasor-->
+        <dependency>
+            <groupId>net.hasor</groupId>
+            <artifactId>hasor-spring</artifactId>
+            <version>4.1.7</version>
+        </dependency>
+        <!--DataWay 是Hasor生态中的一员-->
+        <dependency>
+            <groupId>net.hasor</groupId>
+            <artifactId>hasor-dataway</artifactId>
+            <version>4.1.7</version><!-- 4.1.4 包存在UI资源缺失问题 -->
+        </dependency>
+        <!--mysql-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!--JDBC-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
     </dependencies>
-
+    <build>
+        <!-- 更改打包之后的 jar name，去掉 version 信息，便于部署 -->
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <!-- 打包插件，下面的配置非常重要，勿改！ -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>club.zzxn.ExampleApplication</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
 </project>

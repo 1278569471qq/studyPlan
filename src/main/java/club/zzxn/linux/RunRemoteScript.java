@@ -2,6 +2,8 @@ package club.zzxn.linux;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
@@ -28,7 +30,7 @@ public class RunRemoteScript {
     private static final int CHANNEL_TIMEOUT = 5000;
 
     public static void main(String[] args) throws IOException, JSchException {
-        String command = "sh /root/zzx/script/st.sh asass";
+        String command = "source /etc/profile; sh  /root/zzx/script/start.sh study.jar 8089 2>&1";
 
         JSch jsch = new JSch();
         Session session = jsch.getSession(USERNAME, REMOTE_HOST, 22);
@@ -42,7 +44,12 @@ public class RunRemoteScript {
 
         ((ChannelExec) channel).setErrStream(System.err);
 
+        PipedInputStream pipeIn = new PipedInputStream();
+        PipedOutputStream pipeOut = new PipedOutputStream( pipeIn );
+        channel.setInputStream( pipeIn );
+
         InputStream in = channel.getInputStream();
+        InputStream err = channel.getExtInputStream();
 
         channel.connect();
 
@@ -50,6 +57,11 @@ public class RunRemoteScript {
         while (true) {
             while (in.available() > 0) {
                 int i = in.read(tmp, 0, 1024);
+                if (i < 0) break;
+                System.out.print(new String(tmp, 0, i));
+            }
+            while (err.available() > 0) {
+                int i = err.read(tmp, 0, 1024);
                 if (i < 0) break;
                 System.out.print(new String(tmp, 0, i));
             }
