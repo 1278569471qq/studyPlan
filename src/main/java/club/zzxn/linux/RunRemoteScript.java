@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServletResponse;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
@@ -29,8 +32,8 @@ public class RunRemoteScript {
     //管道流超时时间(执行脚本超时时间)
     private static final int CHANNEL_TIMEOUT = 5000;
 
-    public static void main(String[] args) throws IOException, JSchException {
-        String command = "source /etc/profile; sh  /root/zzx/script/start.sh study.jar 8089 2>&1";
+    public static void startLinux(HttpServletResponse response) throws IOException, JSchException {
+        String command = "source /etc/profile; sh  /root/zzx/script/start.sh study.jar 80 2>&1";
 
         JSch jsch = new JSch();
         Session session = jsch.getSession(USERNAME, REMOTE_HOST, 22);
@@ -45,7 +48,6 @@ public class RunRemoteScript {
         ((ChannelExec) channel).setErrStream(System.err);
 
         PipedInputStream pipeIn = new PipedInputStream();
-        PipedOutputStream pipeOut = new PipedOutputStream( pipeIn );
         channel.setInputStream( pipeIn );
 
         InputStream in = channel.getInputStream();
@@ -54,16 +56,21 @@ public class RunRemoteScript {
         channel.connect();
 
         byte[] tmp = new byte[1024];
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter writer = response.getWriter();
         while (true) {
             while (in.available() > 0) {
                 int i = in.read(tmp, 0, 1024);
                 if (i < 0) break;
-                System.out.print(new String(tmp, 0, i));
+                String echo = new String(tmp, 0, i);
+                writer.println(echo + "</br>");
+                writer.flush();
             }
             while (err.available() > 0) {
                 int i = err.read(tmp, 0, 1024);
                 if (i < 0) break;
-                System.out.print(new String(tmp, 0, i));
+                writer.println(new String(tmp, 0, i));
+                writer.flush();
             }
             if (channel.isClosed()) {
                 if (in.available() > 0) continue;
@@ -75,6 +82,7 @@ public class RunRemoteScript {
             } catch (Exception ee) {
             }
         }
+        writer.close();
         channel.disconnect();
         session.disconnect();
 
