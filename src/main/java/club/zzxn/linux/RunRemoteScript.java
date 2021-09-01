@@ -32,8 +32,8 @@ public class RunRemoteScript {
     //管道流超时时间(执行脚本超时时间)
     private static final int CHANNEL_TIMEOUT = 5000;
 
-    public static void startLinux(HttpServletResponse response) throws IOException, JSchException {
-        String command = "source /etc/profile; sh  /root/zzx/script/start.sh study.jar 8080 2>&1";
+    public static void startLinux(HttpServletResponse response, int port) throws IOException, JSchException {
+        String command = "source /etc/profile; sh  /root/zzx/script/start.sh study.jar " + port +" 2>&1";
 
         JSch jsch = new JSch();
         Session session = jsch.getSession(USERNAME, REMOTE_HOST, 22);

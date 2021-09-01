@@ -15,17 +15,17 @@ import club.zzxn.linux.RunRemoteScript;
 @RestController
 public class StartController {
     @RequestMapping("/start/linux")
-    public void startLinux(HttpServletResponse response){
+    public void startLinux(HttpServletResponse response, int port){
         try {
-            RunRemoteScript.startLinux(response);
+            RunRemoteScript.startLinux(response, port);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     @RequestMapping("/")
-    public void index(HttpServletRequest request, HttpServletResponse response){
+    public void index(HttpServletResponse response){
         try {
-            response.sendRedirect("start/linux");
+            response.sendRedirect("start/linux?port=8080");
         } catch (Exception e) {
             e.printStackTrace();
         }
