@@ -1,14 +1,21 @@
 package club.zzxn.hasor;
 
 
+import java.lang.reflect.Method;
+import java.util.function.Predicate;
+
+import javax.sql.DataSource;
+
+import org.springframework.stereotype.Component;
+
+import club.zzxn.linux.filter.SimpleInterceptor;
 import net.hasor.core.ApiBinder;
 import net.hasor.core.DimModule;
+import net.hasor.core.Matcher;
+import net.hasor.core.exts.aop.Matchers;
 import net.hasor.db.JdbcModule;
 import net.hasor.db.Level;
 import net.hasor.spring.SpringModule;
-import org.springframework.stereotype.Component;
-
-import javax.sql.DataSource;
 /**
  * @author zhangzhenxin03 <zhangzhenxin03@kuaishou.com>
  * Created on 2021-08-29
@@ -32,5 +39,11 @@ public class ExampleModule implements SpringModule {
     @Override
     public void loadModule(ApiBinder apiBinder) throws Throwable {
         apiBinder.installModule(new JdbcModule(Level.Full, this.dataSource));
+        //1.任意类
+        Predicate<Class<?>> atClass = Matchers.anyClass();
+        //2.任意方法
+        Predicate<Method> atMethod = Matchers.anyMethod();
+        //3.注册拦截器让@MyAop注解生效
+        apiBinder.bindInterceptor(atClass, atMethod, new SimpleInterceptor());
     }
 }
