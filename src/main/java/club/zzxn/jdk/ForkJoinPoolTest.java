@@ -23,8 +23,8 @@ public class ForkJoinPoolTest {
         System.out.println("poolParallelism :" + ForkJoinPool.getCommonPoolParallelism());
 
         //注意查看线程sleep时候，有几个线程在打印数据。特意sleep时间间隔较长
-//        test1(firstRange, secondRange);
-        test2(firstRange, secondRange);
+        test1(firstRange, secondRange);
+//        test2(firstRange, secondRange);
         //保证程序一直存活的，打印数据
         while (true) {
             System.out.println(Thread.currentThread().getName());
@@ -63,6 +63,7 @@ public class ForkJoinPoolTest {
                 firstTask.run();
             }
         },"thread-111111").start();
+
         //new一个线程，模拟不同的请求，以免认为是顺序调用
         new Thread(new Runnable() {
             @Override

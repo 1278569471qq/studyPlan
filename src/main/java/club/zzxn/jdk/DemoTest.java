@@ -1,13 +1,15 @@
 package club.zzxn.jdk;
 
+import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-
-import javax.xml.transform.dom.DOMSource;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,20 +42,15 @@ public class DemoTest {
     //匿名内部类
     @Test
     public void test2(){
-        List<Student> list = filter(students, new FilterProcess<Student>() {
-            @Override
-            public boolean process(Student student) {
-                return student.getName().equals("李四");
-            }
-        });
+        List<Student> list = filter(students,  student -> student.getName().equals("李四"));
         for (Student student : list) {
             System.out.println(student);
         }
     }
-    public List<Student> filter(List<Student> students, FilterProcess<Student> filterProcess){
+    public List<Student> filter(List<Student> students, Predicate<Student> filterProcess){
         List<Student> list = new ArrayList<>();
         for (Student student : students) {
-            if(filterProcess.process(student)){
+            if(filterProcess.test(student)){
                 list.add(student);
             }
         }
@@ -72,7 +69,6 @@ public class DemoTest {
         //并行
         students.parallelStream().filter((e) -> e.getName().equals("李四"))
                 .forEach(System.out::println);
-
     }
 
     @Test
@@ -139,11 +135,13 @@ public class DemoTest {
     public void before() {
         startTime = System.currentTimeMillis();
     }
+
     @After
     public void after() {
         long endTime = System.currentTimeMillis();
         System.out.println("time :" + (endTime - startTime));
     }
+
     @Test
     public void forMethod() {
         for (int i = 0; i < 10000; i++) {
@@ -159,7 +157,76 @@ public class DemoTest {
         }
     }
     @Test
-    public void test10() {
+    public void test10() throws FileNotFoundException {
+//        FileInputStream fileInputStream = new FileInputStream("a.txt");
+//        try(fileInputStream) {
+//            //读取操作
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
 
+    @Test
+    public void test11() {
+        var s = "hello";
+        var i = 2;
+        int j = 0;
+        var d = 2.3d;
+        System.out.println(i);
+        var list = new ArrayList<String>();
+        list.add("add");
+
+    }
+    @Test
+    public void test12() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("aaa");
+        list.add("bbb");
+        list.add("ccc");
+//
+//        List<String> copyOfList = List.copyOf(list);
+//        for (String s : copyOfList) {
+//            System.out.println(s);
+//        }
+//        System.out.println(copyOfList.getClass()); // java.util.ImmutableCollections$ListN
+    }
+
+    @Test
+    public void test13() {
+        Outer.Inner inner = new Outer().new Inner();
+        inner.test();
+    }
+
+    @Test
+    public void test14() {
+        //判断是否是空白
+        System.out.println("   ".isBlank()); //true
+        //去除空格
+        System.out.println("    str  ".strip());// 可以去除全角的空白
+        System.out.println("    str  ".trim());//不能去除全角的空白
+        //去除首部空格
+        System.out.println("    str  ".stripLeading());
+        //去除尾部空格
+        System.out.println("    str  ".stripTrailing());
+        //复制字符串
+        System.out.println("123".repeat(3)); //123123123
+        //行数统计
+        System.out.println("A\nB\nC".lines().count()); //3
+
+    }
+    @Test
+    public void test15() {
+
+        System.out.println(LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli());
+    }
+}
+
+class Outer{
+    private int outInt;
+
+    public class Inner{
+        public void test() {
+            System.out.println("outInt :" + outInt);
+        }
     }
 }

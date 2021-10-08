@@ -2,6 +2,7 @@ package club.zzxn;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import net.hasor.spring.boot.EnableHasor;
 import net.hasor.spring.boot.EnableHasorWeb;
@@ -12,6 +13,7 @@ import net.hasor.spring.boot.EnableHasorWeb;
  */
 @EnableHasor()
 @EnableHasorWeb()
+@EnableScheduling
 @SpringBootApplication(scanBasePackages = { "club.zzxn" })
 public class ExampleApplication {
     public static void main(String[] args) {
