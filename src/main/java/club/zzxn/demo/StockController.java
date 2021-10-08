@@ -40,7 +40,7 @@ public class StockController {
     }
 
     @RequestMapping("/send")
-    @Scheduled(cron="*/1 * * * * ?")
+    @Scheduled(cron="0/1 0 9-15 * * ? ")
     public void process() {
         log.info("start process ");
         RestTemplate restTemplate = new RestTemplate();
@@ -80,7 +80,7 @@ public class StockController {
     }
     private void sendQQMessage(String body) {
         try {
-            String qq = "zhangzhenxin03@kuaishou.com";
+            String qq = "495960666@qq.com";
             MimeMessage mimeMessage = this.mailSender.createMimeMessage();
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
             message.setFrom("495960666@qq.com");//设置发件qq邮箱
