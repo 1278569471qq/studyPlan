@@ -9,6 +9,13 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   main:
     allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
+  mail:
+    host: smtp.qq.com
+    username: 495960666@qq.com
+    password: dxbesijgvxxvbhhi
+    default-encoding: UTF-8
+    port: 587
+
 # 是否启用 Dataway 功能（必选：默认false）
 HASOR_DATAQL_DATAWAY: true
 
@@ -23,4 +30,5 @@ HASOR_DATAQL_DATAWAY_UI_URL: /config/
 
 # SQL执行器方言设置（可选，建议设置）
 HASOR_DATAQL_FX_PAGE_DIALECT: mysql
+
 
