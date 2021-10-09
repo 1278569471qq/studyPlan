@@ -30,7 +30,7 @@ public class StartController {
     @RequestMapping("/start")
     public void index(HttpServletResponse response){
         try {
-            response.sendRedirect("start/linux?port=8080");
+            response.sendRedirect("start/linux?port=8089");
         } catch (Exception e) {
             e.printStackTrace();
         }
