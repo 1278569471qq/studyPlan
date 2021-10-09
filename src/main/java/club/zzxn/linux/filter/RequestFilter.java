@@ -2,6 +2,7 @@ package club.zzxn.linux.filter;
 
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,6 +18,10 @@ import com.google.common.collect.Sets;
 @Component
 public class RequestFilter extends HandlerInterceptorAdapter {
     public static Set<String> ips = Sets.newConcurrentHashSet();
+    @PostConstruct
+    public void init() {
+        ips.add("127.0.0.1");
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request
