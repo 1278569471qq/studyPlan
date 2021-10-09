@@ -1,5 +1,7 @@
 package club.zzxn.linux;
 
+import static scala.Console.println;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
@@ -7,6 +9,8 @@ import java.io.PipedOutputStream;
 import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletResponse;
+
+import org.junit.Test;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
@@ -34,7 +38,6 @@ public class RunRemoteScript {
 
     public static void startLinux(HttpServletResponse response, int port) throws IOException, JSchException {
         String command = "source /etc/profile; sh  /root/zzx/script/start.sh study.jar " + port +" 2>&1";
-
         JSch jsch = new JSch();
         Session session = jsch.getSession(USERNAME, REMOTE_HOST, 22);
         session.setPassword(PASSWORD);
@@ -42,19 +45,13 @@ public class RunRemoteScript {
         session.connect(60 * 1000);
         Channel channel = session.openChannel("exec");
         ((ChannelExec) channel).setCommand(command);
-
         channel.setInputStream(null);
-
         ((ChannelExec) channel).setErrStream(System.err);
-
         PipedInputStream pipeIn = new PipedInputStream();
         channel.setInputStream( pipeIn );
-
         InputStream in = channel.getInputStream();
         InputStream err = channel.getExtInputStream();
-
         channel.connect();
-
         byte[] tmp = new byte[1024];
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter writer = response.getWriter();
@@ -77,14 +74,49 @@ public class RunRemoteScript {
                 System.out.println("exit-status: " + channel.getExitStatus());
                 break;
             }
-            try {
-                Thread.sleep(1000);
-            } catch (Exception ee) {
-            }
         }
         writer.close();
         channel.disconnect();
         session.disconnect();
+    }
 
+    @Test
+    public void start() throws Exception {
+        String command = "source /etc/profile; sh  /root/zzx/script/start.sh study.jar " + 8081 +" 2>&1";
+        JSch jsch = new JSch();
+        Session session = jsch.getSession(USERNAME, REMOTE_HOST, 22);
+        session.setPassword(PASSWORD);
+        session.setConfig("StrictHostKeyChecking", "no");
+        session.connect(60 * 1000);
+        Channel channel = session.openChannel("exec");
+        ((ChannelExec) channel).setCommand(command);
+        channel.setInputStream(null);
+        ((ChannelExec) channel).setErrStream(System.err);
+        PipedInputStream pipeIn = new PipedInputStream();
+        channel.setInputStream( pipeIn );
+        InputStream in = channel.getInputStream();
+        InputStream err = channel.getExtInputStream();
+        channel.connect();
+        byte[] tmp = new byte[1024];
+        while (true) {
+            while (in.available() > 0) {
+                int i = in.read(tmp, 0, 1024);
+                if (i < 0) break;
+                String echo = new String(tmp, 0, i);
+                System.out.println(echo);
+            }
+            while (err.available() > 0) {
+                int i = err.read(tmp, 0, 1024);
+                if (i < 0) break;
+                System.out.println(new String(tmp, 0, i));
+            }
+            if (channel.isClosed()) {
+                if (in.available() > 0) continue;
+                System.out.println("exit-status: " + channel.getExitStatus());
+                break;
+            }
+        }
+        channel.disconnect();
+        session.disconnect();
     }
 }

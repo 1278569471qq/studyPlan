@@ -30,6 +30,7 @@ public class StockController {
     private final static String STOCK_URL = "http://hq.sinajs.cn/list=%s";
     private static List<String> stock_list = Lists.newArrayList("sz002106");
     private final static AtomicInteger atomicInteger = new AtomicInteger(0);
+    private static String preResult = "";
     private static long TIME = currentTimeMillis();
     @Autowired
     JavaMailSender mailSender;//注入QQ发送邮件的bean
@@ -54,6 +55,13 @@ public class StockController {
             if (StringUtils.isBlank(stock)) {
                 continue;
             }
+            if (StringUtils.isEmpty(preResult)) {
+                preResult = stock;
+            }
+            if (StringUtils.equalsIgnoreCase(preResult, stock)) {
+                log.info("忽略。。。。。。。。。。。");
+                continue;
+            }
             String[] stockInfo = stock.substring(stock.indexOf("=") + 1).split(",");
             String stockName = stockInfo[0];
 //            String todayOpeningPrice = stockInfo[1];
@@ -61,7 +69,7 @@ public class StockController {
             String currentPrice = stockInfo[3];
             Double percentageGain = (Double.parseDouble(currentPrice) - Double.parseDouble(yesterdayClosingPrice))
                     / Double.parseDouble(yesterdayClosingPrice);
-            if (percentageGain > 0.02) {
+            if (percentageGain > 0.03) {
                 if (atomicInteger.get() >= 2) {
                     return;
                 }
