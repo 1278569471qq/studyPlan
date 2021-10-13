@@ -1,6 +1,7 @@
 package club.zzxn.linux.filter;
 
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +35,7 @@ public class RequestFilter extends HandlerInterceptorAdapter {
             log.info("无权限访问，ip: {}, url :{}", ip, request.getRequestURI());
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().println("没有权限访问此接口");
+            TimeUnit.SECONDS.sleep(2);
             return false;
         }
         return true;
