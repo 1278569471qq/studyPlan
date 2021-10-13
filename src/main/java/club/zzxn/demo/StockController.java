@@ -1,6 +1,7 @@
 package club.zzxn.demo;
 
 import static java.lang.System.currentTimeMillis;
+import static java.lang.System.setOut;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;

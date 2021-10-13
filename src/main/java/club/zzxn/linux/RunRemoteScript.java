@@ -82,7 +82,7 @@ public class RunRemoteScript {
 
     @Test
     public void start() throws Exception {
-        String command = "source /etc/profile; sh  /root/zzx/script/start.sh study.jar " + 8081 +" 2>&1";
+        String command = "source /etc/profile; sh  /root/zzx/script/start.sh study.jar " + 8089 +" 2>&1";
         JSch jsch = new JSch();
         Session session = jsch.getSession(USERNAME, REMOTE_HOST, 22);
         session.setPassword(PASSWORD);
