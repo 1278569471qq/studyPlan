@@ -12,7 +12,8 @@
 
     <groupId>com.zzxn</groupId>
     <artifactId>study</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
+
 
     <dependencies>
         <dependency>
@@ -111,6 +112,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.0.1</version>
+        </dependency>
     </dependencies>
     <build>
         <!-- 更改打包之后的 jar name，去掉 version 信息，便于部署 -->
@@ -121,7 +127,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>club.zzxn.ExampleApplication</mainClass>
+                    <skip>true</skip>
+                    <mainClass>com.zzx.ExampleApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -130,5 +137,25 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>Nexus Snapshot</name>
+            <url>http://81.70.157.108:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
+    <repositories>
+        <repository>
+            <id>maven-public</id>
+            <name>maven-public</name>
+            <url>http://81.70.157.108:8081/repository/maven-public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
 </project>
